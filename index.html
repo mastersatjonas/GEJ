@@ -323,6 +323,13 @@
                     </div>
                 </div>
                 <div class="service-card">
+                    <img src="./img/serviços.jpeg" alt="Instalação de Ar Condicionado" class="service-img">
+                    <div class="service-content">
+                        <h3>Instalação de Ar Condicionado</h3>
+                        <p>Instalação de sistemas de ar condicionado split.</p>
+                    </div>
+                </div>
+                <div class="service-card">
                     <img src="./img/manutenção.jpeg" alt="Instalação de Ar Condicionado" class="service-img">
                     <div class="service-content">
                         <h3>Manutenção Preventiva</h3>
@@ -415,28 +422,28 @@
                     </div>
                     <button type="submit" class="btn">Enviar via WhatsApp</button>
                 </form>
-                
+
                 <script>
                     function enviarWhatsApp(e) {
                         e.preventDefault();
-                        
+
                         // Obter os valores dos inputs
                         const nome = document.getElementById('name').value;
                         const email = document.getElementById('email').value;
                         const telefone = document.getElementById('phone').value;
                         const servico = document.getElementById('service').value;
                         const mensagem = document.getElementById('message').value;
-                        
+
                         // Criar a mensagem formatada
                         let texto = `Olá, sou ${nome}.\n`;
                         texto += `Email: ${email}\n`;
                         texto += `Telefone: ${telefone}\n`;
                         texto += `Interesse em: ${servico}\n\n`;
                         texto += `${mensagem}`;
-                        
+
                         // Seu número de WhatsApp com código do país (ex: 5563992354732)
                         const seuNumero = "5563992354732";
-                        
+
                         // Abrir WhatsApp com mensagem pré-formatada
                         window.open(`https://wa.me/${seuNumero}?text=${encodeURIComponent(texto)}`, '_blank');
                     }
@@ -444,7 +451,7 @@
             </div>
         </div>
     </section>
-    
+
 
     <footer>
         <div class="container">
