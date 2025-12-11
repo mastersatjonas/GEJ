@@ -257,7 +257,28 @@
         </div>
     </footer>
 
-   
+   <script>
+// Script para criar flocos de neve
+function createSnowflakes() {
+    const container = document.getElementById('snowflakes-container');
+    const numberOfSnowflakes = 50;
+
+    for (let i = 0; i < numberOfSnowflakes; i++) {
+        const snowflake = document.createElement('div');
+        snowflake.classList.add('snowflake');
+        snowflake.innerHTML = '❄';
+        snowflake.style.left = Math.random() * 100 + '%';
+        snowflake.style.animationDuration = (Math.random() * 3 + 7) + 's';
+        snowflake.style.animationDelay = Math.random() * 5 + 's';
+        snowflake.style.fontSize = (Math.random() * 10 + 10) + 'px';
+        container.appendChild(snowflake);
+    }
+}
+
+// Executar quando a página carregar
+window.addEventListener('load', createSnowflakes);
+</script>
+
 </body>
 
 </html>
