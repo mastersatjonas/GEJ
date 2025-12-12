@@ -5,6 +5,236 @@
   box-sizing: border-box;
   font-family: 'Arial', sans-serif;
 }
+/* Animação de flocos de neve */
+#snowflakes-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+    overflow: hidden;
+}
+
+.snowflake {
+    position: absolute;
+    top: -10px;
+    color: #fff;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+    user-select: none;
+    cursor: default;
+    animation-name: snowfall;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    opacity: 0.8;
+}
+
+@keyframes snowfall {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* Header com tema de Natal */
+.christmas-header {
+    position: relative;
+    border-bottom: 3px solid #C41E3A;
+}
+
+/* Luzes de Natal no topo do header */
+.christmas-lights {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 8px;
+    background: repeating-linear-gradient(
+        90deg,
+        #ff0000 0px, #ff0000 20px,
+        #00ff00 20px, #00ff00 40px,
+        #ffff00 40px, #ffff00 60px,
+        #0000ff 60px, #0000ff 80px,
+        #ff00ff 80px, #ff00ff 100px
+    );
+    opacity: 0.7;
+    animation: lights 2s linear infinite;
+    z-index: 1;
+}
+
+@keyframes lights {
+    0%, 100% { 
+        opacity: 0.7; 
+    }
+    50% { 
+        opacity: 1; 
+        filter: brightness(1.2);
+    }
+}
+
+/* Banner de promoção de Natal */
+.christmas-banner {
+    background: linear-gradient(90deg, #165B33 0%, #C41E3A 50%, #165B33 100%);
+    color: white;
+    text-align: center;
+    padding: 12px;
+    font-weight: bold;
+    font-size: 1rem;
+    animation: glow 2s ease-in-out infinite alternate;
+    position: relative;
+    overflow: hidden;
+}
+
+.christmas-banner::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent,
+        rgba(255, 255, 255, 0.1),
+        transparent
+    );
+    animation: shine 3s infinite;
+}
+
+@keyframes glow {
+    from { 
+        box-shadow: 0 0 5px #fff, 0 0 10px #fff; 
+    }
+    to { 
+        box-shadow: 0 0 10px #fff, 0 0 20px #C41E3A, 0 0 30px #C41E3A; 
+    }
+}
+
+@keyframes shine {
+    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+/* Ajustes no menu para tema de Natal */
+.christmas-header .menu li a {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.christmas-header .menu li a:hover {
+    color: #C41E3A;
+    text-shadow: 0 0 10px rgba(196, 30, 58, 0.5);
+}
+
+.christmas-header .menu li a::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #C41E3A, #165B33);
+    transition: width 0.3s ease;
+}
+
+.christmas-header .menu li a:hover::after {
+    width: 100%;
+}
+
+/* Adicionar flocos de neve aos títulos */
+.section-title::before {
+    content: '❄️ ';
+    color: #1a5490;
+    margin-right: 10px;
+}
+
+.section-title::after {
+    content: ' ❄️';
+    color: #1a5490;
+    margin-left: 10px;
+}
+
+/* Botão com tema de Natal */
+.btn {
+    background: linear-gradient(135deg, #C41E3A 0%, #9a1830 100%);
+    box-shadow: 0 4px 15px rgba(196, 30, 58, 0.4);
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    background: linear-gradient(135deg, #9a1830 0%, #C41E3A 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 25px rgba(196, 30, 58, 0.6);
+}
+
+/* Cards de serviço com bordas natalinas */
+.service-card {
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.service-card:hover {
+    border-color: #C41E3A;
+    box-shadow: 0 8px 30px rgba(196, 30, 58, 0.3);
+    transform: translateY(-5px);
+}
+
+/* Testimonials com decoração natalina */
+.testimonial-card {
+    border-left: 5px solid #165B33;
+    border-right: 5px solid #C41E3A;
+    position: relative;
+}
+
+.testimonial-card::before {
+    content: '⭐';
+    position: absolute;
+    top: -15px;
+    right: 20px;
+    font-size: 2rem;
+    filter: drop-shadow(0 0 5px gold);
+}
+
+/* Footer com mensagem de Natal */
+.footer-bottom::before {
+    content: '🎄 Feliz Natal e Próspero Ano Novo! 🎄';
+    display: block;
+    text-align: center;
+    padding: 20px;
+    margin-bottom: 20px;
+    background: linear-gradient(90deg, #165B33 0%, #C41E3A 50%, #165B33 100%);
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: white;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .christmas-banner {
+        font-size: 0.85rem;
+        padding: 10px 5px;
+    }
+    
+    .snowflake {
+        font-size: 12px !important;
+    }
+    
+    .christmas-lights {
+        height: 6px;
+    }
+}
 
 body {
   background-color: #f5f5f5;
