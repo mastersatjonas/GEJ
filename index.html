@@ -9,21 +9,26 @@
 </head>
 
 <body>
-    <header>
-        <div class="container">
-            <nav>
-                <div class="logo">G&J<span>REFRIGERAÇÃO</span></div>
-                <ul class="menu">
-                    <li><a href="#inicio">Início</a></li>
-                    <li><a href="#servicos">Serviços</a></li>
-                    <li><a href="#sobre">Sobre Nós</a></li>
-                    <li><a href="#depoimentos">Depoimentos</a></li>
-                    <li><a href="#contato">Contato</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-
+   <header class="christmas-header">
+    <!-- Luzes de Natal animadas -->
+    <div class="christmas-lights"></div>
+    
+    <div class="container">
+        <nav>
+            <div class="logo">G&J<span>REFRIGERAÇÃO</span></div>
+            <ul class="menu">
+                <li><a href="#inicio">Início</a></li>
+                <li><a href="#servicos">Serviços</a></li>
+                <li><a href="#sobre">Sobre Nós</a></li>
+                <li><a href="#depoimentos">Depoimentos</a></li>
+                <li><a href="#contato">Contato</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+<div class="christmas-banner">
+    🎅 PROMOÇÃO ESPECIAL DE NATAL - 15% OFF EM MANUTENÇÃO PREVENTIVA! 🎄
+</div>
     <section id="inicio" class="hero">
         <h1>Soluções Completas em Refrigeração e Eletrodomestico</h1>
         <p>Oferecemos serviços de qualidade para instalação, manutenção e reparo de sistemas de refrigeração, ar
@@ -278,7 +283,7 @@ function createSnowflakes() {
 // Executar quando a página carregar
 window.addEventListener('load', createSnowflakes);
 </script>
-
+<div id="snowflakes-container"></div>
 </body>
 
 </html>
