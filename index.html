@@ -5,63 +5,281 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>G&J Refrigeração - Eletricidade</title>
-   <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Estilo do botão flutuante do Gel e do popup do chat -->
+    <style>
+
+        /* =====================================================
+           BOTÃO FLUTUANTE DO GEL 🐧
+           Fica no canto inferior direito, acima do botão
+           do WhatsApp. Ao clicar, abre o chat popup.
+           ===================================================== */
+
+        /* Wrapper que agrupa o botão e o balão de chamada */
+        .gel-float-wrapper {
+            position: fixed;
+            bottom: 90px;       /* Fica acima do botão do WhatsApp */
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
+        }
+
+        /* Balãozinho de texto "Precisa de ajuda?" */
+        .gel-bubble {
+            background: #fff;
+            border: 1.5px solid #e0e7ef;
+            border-radius: 12px 12px 0 12px;
+            padding: 8px 14px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #1565c0;
+            box-shadow: 0 4px 16px rgba(21,101,192,0.15);
+            white-space: nowrap;
+            animation: bobble 3s ease-in-out infinite;
+            font-family: sans-serif;
+        }
+        @keyframes bobble {
+            0%,100% { transform: translateY(0); }
+            50%      { transform: translateY(-5px); }
+        }
+
+        /* Botão redondo com a foto do mascote */
+        .gel-float-btn {
+            width: 62px;
+            height: 62px;
+            border-radius: 50%;
+            background: #1565c0;
+            border: 3px solid #fff;
+            box-shadow: 0 4px 20px rgba(21,101,192,0.35);
+            cursor: pointer;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .gel-float-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 6px 28px rgba(21,101,192,0.45);
+        }
+        .gel-float-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+            transform: scale(1.2);
+        }
+
+        /* Bolinha vermelha de notificação no botão */
+        .gel-notif {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 16px;
+            height: 16px;
+            background: #e53935;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            font-size: 9px;
+            color: #fff;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: sans-serif;
+        }
+
+        /* Container relativo para posicionar a notificação */
+        .gel-btn-container {
+            position: relative;
+        }
+
+        /* =====================================================
+           POPUP DO CHAT
+           Abre quando o usuário clica no botão do Gel.
+           Aparece acima do botão flutuante.
+           ===================================================== */
+        .gel-chat-popup {
+            position: fixed;
+            bottom: 170px;      /* Fica acima do botão do Gel */
+            right: 20px;
+            width: 360px;
+            height: 580px;
+            z-index: 9998;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 40px rgba(21,101,192,0.25);
+            border: 1px solid #e0e7ef;
+
+            /* Começa escondido — aparece com animação ao clicar */
+            opacity: 0;
+            transform: scale(0.85) translateY(20px);
+            transform-origin: bottom right;
+            pointer-events: none;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+        }
+
+        /* Estado ativo — chat visível */
+        .gel-chat-popup.open {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            pointer-events: all;
+        }
+
+        /* Iframe do chat ocupa todo o popup */
+        .gel-chat-popup iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        /* Responsivo — no celular o popup fica maior */
+        @media (max-width: 420px) {
+            .gel-chat-popup {
+                width: calc(100vw - 16px);
+                height: 75vh;
+                right: 8px;
+                bottom: 160px;
+            }
+            .gel-float-wrapper {
+                right: 12px;
+                bottom: 80px;
+            }
+        }
+
+    </style>
 </head>
 
 <body>
-   <header class="christmas-header">
-  
-    
-    <div class="container">
-        <nav>
-            <div class="logo">G&J<span>REFRIGERAÇÃO</span></div>
-            <ul class="menu">
-                <li><a href="#inicio">Início</a></li>
-                <li><a href="#servicos">Serviços</a></li>
-                <li><a href="#sobre">Sobre Nós</a></li>
-                <li><a href="#depoimentos">Depoimentos</a></li>
-                <li><a href="#contato">Contato</a></li>
-            </ul>
-        </nav>
-    </div>
-</header>
 
+    <!-- =====================================================
+         BOTÃO FLUTUANTE DO GEL 🐧
+         Fica fixo no canto inferior direito.
+         Clique abre/fecha o chat popup.
+         ===================================================== -->
+    <div class="gel-float-wrapper">
+
+        <!-- Balãozinho de chamada (some depois que o chat é aberto) -->
+        <div class="gel-bubble" id="gel-bubble">💬 Precisa de ajuda?</div>
+
+        <!-- Botão com a foto do Gel -->
+        <div class="gel-btn-container">
+            <button class="gel-float-btn" onclick="toggleChat()" title="Falar com o Gel 🐧">
+                <!-- Imagem do mascote — está na pasta /img do projeto -->
+                <img src="./img/mascote-gej.png" alt="Gel - Assistente G&J" />
+            </button>
+            <!-- Bolinha vermelha "1" de notificação -->
+            <div class="gel-notif" id="gel-notif">1</div>
+        </div>
+
+    </div>
+
+    <!-- Popup do chat — começa escondido, abre ao clicar no botão -->
+    <div class="gel-chat-popup" id="gel-chat-popup">
+        <!-- O iframe carrega o arquivo gj-chat-bot.html -->
+        <!-- IMPORTANTE: o arquivo gj-chat-bot.html deve estar na raiz do projeto -->
+        <iframe
+            src="./gj-chat-bot.html"
+            title="Assistente Virtual Gel - G&J Refrigeração">
+        </iframe>
+    </div>
+
+    <!-- Script que controla abrir/fechar o chat -->
+    <script>
+        let chatAberto = false;
+
+        function toggleChat() {
+            chatAberto = !chatAberto;
+            const popup  = document.getElementById('gel-chat-popup');
+            const bubble = document.getElementById('gel-bubble');
+            const notif  = document.getElementById('gel-notif');
+
+            if (chatAberto) {
+                // Abre o chat
+                popup.classList.add('open');
+                // Esconde o balãozinho e a notificação depois que abriu
+                bubble.style.display = 'none';
+                notif.style.display  = 'none';
+            } else {
+                // Fecha o chat
+                popup.classList.remove('open');
+            }
+        }
+
+        // Esconde o balãozinho após 6 segundos automaticamente
+        setTimeout(() => {
+            const bubble = document.getElementById('gel-bubble');
+            if (bubble) bubble.style.opacity = '0';
+            setTimeout(() => { if (bubble) bubble.style.display = 'none'; }, 500);
+        }, 6000);
+    </script>
+
+
+    <!-- ============================================
+         HEADER
+         ============================================ -->
+    <header class="christmas-header">
+        <div class="container">
+            <nav>
+                <div class="logo">G&J<span>REFRIGERAÇÃO</span></div>
+                <ul class="menu">
+                    <li><a href="#inicio">Início</a></li>
+                    <li><a href="#servicos">Serviços</a></li>
+                    <li><a href="#sobre">Sobre Nós</a></li>
+                    <li><a href="#depoimentos">Depoimentos</a></li>
+                    <li><a href="#contato">Contato</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ============================================
+         HERO
+         ============================================ -->
     <section id="inicio" class="hero">
-        <h1>Soluções Completas em Refrigeração e Eletrodomestico</h1>
+        <h1>Soluções Completas em Refrigeração e Eletrodoméstico</h1>
         <p>Oferecemos serviços de qualidade para instalação, manutenção e reparo de sistemas de refrigeração, ar
-            condicionado, Maquinas de lavar e outros, para residências e empresas.</p>
+            condicionado, Máquinas de lavar e outros, para residências e empresas.</p>
         <a href="#contato" class="btn">Solicite um Orçamento</a>
     </section>
 
+    <!-- ============================================
+         SERVIÇOS
+         ============================================ -->
     <section id="servicos" class="section">
         <div class="container">
             <h2 class="section-title">Nossos Serviços</h2>
             <div class="services">
                 <div class="service-card">
-                    <img src="./img/intalação.jpg" alt="Instalação de Ar Condicionado" class="service-img">
+                    <img src="./img/intalação.jpg" alt="Instalação de Ar Condicionado Split" class="service-img">
                     <div class="service-content">
-                        <h3>Instalação de Ar Condicionado</h3>
+                        <h3>Instalação de Ar Condicionado Split</h3>
                         <p>Instalação profissional de sistemas de ar condicionado split, janela e centrais para
                             ambientes residenciais e comerciais.</p>
                     </div>
                 </div>
                 <div class="service-card">
-                    <img src="./img/instalação piso teto.jpg" alt="Instalação de Ar Condicionado" class="service-img">
+                    <img src="./img/instalação piso teto.jpg" alt="Instalação Piso Teto" class="service-img">
                     <div class="service-content">
-                        <h3>Instalação de Ar Condicionado</h3>
+                        <h3>Instalação Piso Teto</h3>
                         <p>Instalação profissional de sistemas de ar condicionado piso teto, janela e centrais para
                             ambientes residenciais e comerciais.</p>
                     </div>
                 </div>
                 <div class="service-card">
-                    <img src="./img/serviços.jpeg" alt="Instalação de Ar Condicionado" class="service-img">
+                    <img src="./img/serviços.jpeg" alt="Instalação Residencial" class="service-img">
                     <div class="service-content">
-                        <h3>Instalação de Ar Condicionado</h3>
-                        <p>Instalação de sistemas de ar condicionado split.</p>
+                        <h3>Instalação Residencial</h3>
+                        <p>Instalação de sistemas de ar condicionado split para residências com garantia e qualidade.</p>
                     </div>
                 </div>
                 <div class="service-card">
-                    <img src="./img/manutenção.jpeg" alt="Instalação de Ar Condicionado" class="service-img">
+                    <img src="./img/manutenção.jpeg" alt="Manutenção Preventiva" class="service-img">
                     <div class="service-content">
                         <h3>Manutenção Preventiva</h3>
                         <p>Serviços de manutenção periódica para garantir o funcionamento eficiente e prolongar a vida
@@ -69,50 +287,48 @@
                     </div>
                 </div>
                 <div class="service-card">
-                    <img src="./img/reparo.jpg" alt="Instalação de Ar Condicionado" class="service-img">
+                    <img src="./img/reparo.jpg" alt="Reparos e Consertos" class="service-img">
                     <div class="service-content">
                         <h3>Reparos e Consertos</h3>
                         <p>Diagnóstico preciso e reparo de problemas em sistemas de refrigeração, ar condicionado e
                             climatização de todos os modelos.</p>
                     </div>
                 </div>
-
                 <div class="service-card">
-                    <img src="./img/reparo em lavadora.jpg" alt="Instalação de Ar Condicionado" class="service-img">
+                    <img src="./img/reparo em lavadora.jpg" alt="Reparo em Lavadora" class="service-img">
                     <div class="service-content">
-                        <h3>Reparos e Consertos</h3>
-                        <p>Reparo com troca de peças em maquina de lavar roupa.</p>
+                        <h3>Reparo em Lavadora</h3>
+                        <p>Reparo com troca de peças em máquina de lavar roupa.</p>
                     </div>
                 </div>
-
                 <div class="service-card">
-                    <img src="./img/reparo em geladeira.jpg" alt="Instalação de Ar Condicionado" class="service-img">
+                    <img src="./img/reparo em geladeira.jpg" alt="Reparo em Geladeira" class="service-img">
                     <div class="service-content">
-                        <h3>Reparos e Consertos</h3>
-                        <p>Reparo com troca de peças em Geladeira. </p>
+                        <h3>Reparo em Geladeira</h3>
+                        <p>Reparo com troca de peças em geladeira.</p>
                     </div>
                 </div>
-
                 <div class="service-card">
-                    <img src="./img/manutenção em lavadora.jpg" alt="Instalação de Ar Condicionado" class="service-img">
+                    <img src="./img/manutenção em lavadora.jpg" alt="Manutenção e Limpeza" class="service-img">
                     <div class="service-content">
-                        <h3>Manutenção e Limpezas</h3>
-                        <p>Limpeza completa em maquina de lavar para evitar futuros danos nas peças. </p>
+                        <h3>Manutenção e Limpeza</h3>
+                        <p>Limpeza completa em máquina de lavar para evitar futuros danos nas peças.</p>
                     </div>
                 </div>
-
                 <div class="service-card">
-                    <img src="./img/tubulação em freezer.jpeg" alt="Instalação de Ar Condicionado" class="service-img">
+                    <img src="./img/tubulação em freezer.jpeg" alt="Troca de Tubulação" class="service-img">
                     <div class="service-content">
-                        <h3>Reparos e Consertos</h3>
-                        <p>Troca de tubulação em freezer. </p>
+                        <h3>Troca de Tubulação</h3>
+                        <p>Troca de tubulação em freezer.</p>
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
 
+    <!-- ============================================
+         SOBRE
+         ============================================ -->
     <section id="sobre" class="section highlighted-section">
         <div class="container">
             <h2 class="section-title">Sobre Nossa Empresa</h2>
@@ -133,6 +349,9 @@
         </div>
     </section>
 
+    <!-- ============================================
+         DEPOIMENTOS
+         ============================================ -->
     <section id="depoimentos" class="section">
         <div class="container">
             <h2 class="section-title">O que dizem nossos clientes</h2>
@@ -159,6 +378,9 @@
         </div>
     </section>
 
+    <!-- ============================================
+         CONTATO
+         ============================================ -->
     <section id="contato" class="section highlighted-section">
         <div class="container">
             <h2 class="section-title">Entre em Contato</h2>
@@ -190,113 +412,93 @@
                 <script>
                     function enviarWhatsApp(e) {
                         e.preventDefault();
-
-                        // Obter os valores dos inputs
-                        const nome = document.getElementById('name').value;
-                        const email = document.getElementById('email').value;
+                        const nome     = document.getElementById('name').value;
+                        const email    = document.getElementById('email').value;
                         const telefone = document.getElementById('phone').value;
-                        const servico = document.getElementById('service').value;
+                        const servico  = document.getElementById('service').value;
                         const mensagem = document.getElementById('message').value;
-
-                        // Criar a mensagem formatada
                         let texto = `Olá, sou ${nome}.\n`;
                         texto += `Email: ${email}\n`;
                         texto += `Telefone: ${telefone}\n`;
                         texto += `Interesse em: ${servico}\n\n`;
                         texto += `${mensagem}`;
-
-                        // Seu número de WhatsApp com código do país (ex: 5563992354732)
                         const seuNumero = "5563992354732";
-
-                        // Abrir WhatsApp com mensagem pré-formatada
                         window.open(`https://wa.me/${seuNumero}?text=${encodeURIComponent(texto)}`, '_blank');
                     }
-
                 </script>
             </div>
         </div>
     </section>
 
+    <!-- ============================================
+         LOCALIZAÇÃO
+         ============================================ -->
     <section id="localizacao" class="section">
-    <div class="container">
-        <h2 class="section-title">Nossa Localização</h2>
-        
-        <div class="location-wrapper">
-            <!-- Informações de localização -->
-            <div class="location-info">
-                <div class="location-card">
-                    <div class="location-icon">📍</div>
-                    <h3>Endereço</h3>
-                    <p>Av. Goiás, 1262 - Centro<br>Augustinópolis - TO</p>
+        <div class="container">
+            <h2 class="section-title">Nossa Localização</h2>
+            <div class="location-wrapper">
+                <div class="location-info">
+                    <div class="location-card">
+                        <div class="location-icon">📍</div>
+                        <h3>Endereço</h3>
+                        <p>Av. Goiás, 1262 - Centro<br>Augustinópolis - TO</p>
+                    </div>
+                    <div class="location-card">
+                        <div class="location-icon">📞</div>
+                        <h3>Telefones</h3>
+                        <p>
+                            <a href="tel:+5563999754964">(63) 9 9975-4964</a><br>
+                            <a href="https://wa.me/5563992354732" target="_blank">(63) 9 9235-4732</a>
+                        </p>
+                    </div>
+                    <div class="location-card">
+                        <div class="location-icon">⏰</div>
+                        <h3>Horário de Atendimento</h3>
+                        <p>Segunda a Sexta: 8h às 18h<br>Plantão 24h para emergências</p>
+                    </div>
+                    <div class="location-card">
+                        <div class="location-icon">✉️</div>
+                        <h3>E-mail</h3>
+                        <p><a href="mailto:gjrefrigeracao.l.f@gmail.com">gjrefrigeracao.l.f@gmail.com</a></p>
+                    </div>
+                    <div class="location-buttons">
+                        <a href="https://wa.me/5563992354732?text=Olá!%20Vim%20pelo%20site%20🎄"
+                           class="btn btn-whatsapp" target="_blank">
+                            💬 Chamar no WhatsApp
+                        </a>
+                        <a href="https://www.google.com/maps/search/?api=1&query=Av.+Goiás,+1262+-+Centro+-+Augustinópolis+-+TO"
+                           class="btn btn-maps" target="_blank">
+                            🗺️ Ver no Google Maps
+                        </a>
+                    </div>
                 </div>
-                
-                <div class="location-card">
-                    <div class="location-icon">📞</div>
-                    <h3>Telefones</h3>
-                    <p>
-                        <a href="tel:+5563999754964">(63) 9 9975-4964</a><br>
-                        <a href="https://wa.me/5563992354732" target="_blank">(63) 9 9235-4732</a>
-                    </p>
-                </div>
-                
-                <div class="location-card">
-                    <div class="location-icon">⏰</div>
-                    <h3>Horário de Atendimento</h3>
-                    <p>Segunda a Sexta: 8h às 18h<br>
-                    Plantão 24h para emergências</p>
-                </div>
-                
-                <div class="location-card">
-                    <div class="location-icon">✉️</div>
-                    <h3>E-mail</h3>
-                    <p><a href="mailto:gjrefrigeracao.l.f@gmail.com">gjrefrigeracao.l.f@gmail.com</a></p>
-                </div>
-                
-                <div class="location-buttons">
-                    <a href="https://wa.me/5563992354732?text=Olá!%20Vim%20pelo%20site%20🎄" 
-                       class="btn btn-whatsapp" 
-                       target="_blank">
-                        💬 Chamar no WhatsApp
-                    </a>
-                    <a href="https://www.google.com/maps/search/?api=1&query=Av.+Goiás,+1262+-+Centro+-+Augustinópolis+-+TO" 
-                       class="btn btn-maps" 
-                       target="_blank">
-                        🗺️ Ver no Google Maps
-                    </a>
-                </div>
-            </div>
-            
-            <!-- Mapa -->
-            <div class="location-map">
-                <div class="map-container">
-                    <!-- Iframe do Google Maps -->
-                    <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d992.9189293041055!2d-47.89399959146972!3d-5.466074885921257!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x92c517e957ba3da5%3A0xf6cefe3ca9a01b42!2sG%26J%20-%20Refrigera%C3%A7%C3%A3o%20e%20Eletricidade!5e0!3m2!1spt-BR!2sbr!4v1766164442738!5m2!1spt-BR!2sbr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-                        width="100%" 
-                        height="100%" 
-                        style="border:0; border-radius: 15px;" 
-                        allowfullscreen="" 
-                        loading="lazy" 
-                        referrerpolicy="no-referrer-when-downgrade">
-                    </iframe>
-                    
-                    <!-- Overlay decorativo de Natal (opcional) -->
-                    <div class="map-overlay">
-                        <div class="map-pin">📍</div>
+                <div class="location-map">
+                    <div class="map-container">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d992.9189293041055!2d-47.89399959146972!3d-5.466074885921257!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x92c517e957ba3da5%3A0xf6cefe3ca9a01b42!2sG%26J%20-%20Refrigera%C3%A7%C3%A3o%20e%20Eletricidade!5e0!3m2!1spt-BR!2sbr!4v1766164442738!5m2!1spt-BR!2sbr"
+                            width="100%" height="100%"
+                            style="border:0; border-radius: 15px;"
+                            allowfullscreen="" loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                        <div class="map-overlay">
+                            <div class="map-pin">📍</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-
+    <!-- ============================================
+         RODAPÉ
+         ============================================ -->
     <footer>
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
                     <h3>G&JRefrigeração</h3>
-                    <p>Soluções completas em refrigeração e Eletrodomestico para sua casa ou empresa.</p>
+                    <p>Soluções completas em refrigeração e Eletrodoméstico para sua casa ou empresa.</p>
                 </div>
                 <div class="footer-section">
                     <h3>Links Rápidos</h3>
@@ -314,7 +516,7 @@
                         <li>Telefone: (63) 9 9975-4964</li>
                         <li>WhatsApp: (63) 9 9235-4732</li>
                         <li>Email: gjrefrigeracao.l.f@gmail.com</li>
-                        <li>Endereço: Av. Goiás, 1262 - Centro - Augustonópolis</li>
+                        <li>Endereço: Av. Goiás, 1262 - Centro - Augustinópolis</li>
                     </ul>
                 </div>
                 <div class="footer-section">
@@ -332,28 +534,25 @@
         </div>
     </footer>
 
-   <script>
-// Script para criar flocos de neve
-function createSnowflakes() {
-    const container = document.getElementById('snowflakes-container');
-    const numberOfSnowflakes = 50;
+    <!-- Flocos de neve -->
+    <script>
+        function createSnowflakes() {
+            const container = document.getElementById('snowflakes-container');
+            const numberOfSnowflakes = 50;
+            for (let i = 0; i < numberOfSnowflakes; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.classList.add('snowflake');
+                snowflake.innerHTML = '❄';
+                snowflake.style.left = Math.random() * 100 + '%';
+                snowflake.style.animationDuration = (Math.random() * 3 + 7) + 's';
+                snowflake.style.animationDelay = Math.random() * 5 + 's';
+                snowflake.style.fontSize = (Math.random() * 10 + 10) + 'px';
+                container.appendChild(snowflake);
+            }
+        }
+        window.addEventListener('load', createSnowflakes);
+    </script>
+    <div id="snowflakes-container"></div>
 
-    for (let i = 0; i < numberOfSnowflakes; i++) {
-        const snowflake = document.createElement('div');
-        snowflake.classList.add('snowflake');
-        snowflake.innerHTML = '❄';
-        snowflake.style.left = Math.random() * 100 + '%';
-        snowflake.style.animationDuration = (Math.random() * 3 + 7) + 's';
-        snowflake.style.animationDelay = Math.random() * 5 + 's';
-        snowflake.style.fontSize = (Math.random() * 10 + 10) + 'px';
-        container.appendChild(snowflake);
-    }
-}
-
-// Executar quando a página carregar
-window.addEventListener('load', createSnowflakes);
-</script>
-<div id="snowflakes-container"></div>
 </body>
-
 </html>

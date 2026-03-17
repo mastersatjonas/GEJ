@@ -41,166 +41,8 @@
     }
 }
 
-/* Header com tema de Natal */
-.christmas-header {
-    position: relative;
-    border-bottom: 3px solid #C41E3A;
-}
 
-/* Luzes de Natal no topo do header */
-.christmas-lights {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 8px;
-    background: repeating-linear-gradient(
-        90deg,
-        #ff0000 0px, #ff0000 20px,
-        #00ff00 20px, #00ff00 40px,
-        #ffff00 40px, #ffff00 60px,
-        #0000ff 60px, #0000ff 80px,
-        #ff00ff 80px, #ff00ff 100px
-    );
-    opacity: 0.7;
-    animation: lights 2s linear infinite;
-    z-index: 1;
-}
 
-@keyframes lights {
-    0%, 100% { 
-        opacity: 0.7; 
-    }
-    50% { 
-        opacity: 1; 
-        filter: brightness(1.2);
-    }
-}
-
-/* Banner de promoção de Natal */
-.christmas-banner {
-    background: linear-gradient(90deg, #165B33 0%, #C41E3A 50%, #165B33 100%);
-    color: white;
-    text-align: center;
-    padding: 12px;
-    font-weight: bold;
-    font-size: 1rem;
-    animation: glow 2s ease-in-out infinite alternate;
-    position: relative;
-    overflow: hidden;
-}
-
-.christmas-banner::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(
-        45deg,
-        transparent,
-        rgba(255, 255, 255, 0.1),
-        transparent
-    );
-    animation: shine 3s infinite;
-}
-
-@keyframes glow {
-    from { 
-        box-shadow: 0 0 5px #fff, 0 0 10px #fff; 
-    }
-    to { 
-        box-shadow: 0 0 10px #fff, 0 0 20px #C41E3A, 0 0 30px #C41E3A; 
-    }
-}
-
-@keyframes shine {
-    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-    100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
-}
-
-/* Ajustes no menu para tema de Natal */
-.christmas-header .menu li a {
-    position: relative;
-    transition: all 0.3s ease;
-}
-
-.christmas-header .menu li a:hover {
-    color: #C41E3A;
-    text-shadow: 0 0 10px rgba(196, 30, 58, 0.5);
-}
-
-.christmas-header .menu li a::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: linear-gradient(90deg, #C41E3A, #165B33);
-    transition: width 0.3s ease;
-}
-
-.christmas-header .menu li a:hover::after {
-    width: 100%;
-}
-
-/* Adicionar flocos de neve aos títulos */
-.section-title::before {
-    content: '❄️ ';
-    color: #1a5490;
-    margin-right: 10px;
-}
-
-.section-title::after {
-    content: ' ❄️';
-    color: #1a5490;
-    margin-left: 10px;
-}
-
-/* Botão com tema de Natal */
-.btn {
-    background: linear-gradient(135deg, #C41E3A 0%, #9a1830 100%);
-    box-shadow: 0 4px 15px rgba(196, 30, 58, 0.4);
-    transition: all 0.3s ease;
-}
-
-.btn:hover {
-    background: linear-gradient(135deg, #9a1830 0%, #C41E3A 100%);
-    transform: translateY(-3px);
-    box-shadow: 0 6px 25px rgba(196, 30, 58, 0.6);
-}
-
-/* Cards de serviço com bordas natalinas */
-.service-card {
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
-}
-
-.service-card:hover {
-    border-color: #C41E3A;
-    box-shadow: 0 8px 30px rgba(196, 30, 58, 0.3);
-    transform: translateY(-5px);
-}
-
-/* Testimonials com decoração natalina */
-.testimonial-card {
-    border-left: 5px solid #165B33;
-    border-right: 5px solid #C41E3A;
-    position: relative;
-}
-
-.testimonial-card::before {
-    content: '⭐';
-    position: absolute;
-    top: -15px;
-    right: 20px;
-    font-size: 2rem;
-    filter: drop-shadow(0 0 5px gold);
-}
-
-<style>
 /* ============================================
    SEÇÃO DE LOCALIZAÇÃO - Adicione no style.css
    ============================================ */
@@ -222,7 +64,7 @@
 }
 
 #localizacao::after {
-    content: '🎁';
+    content: '';
     position: absolute;
     bottom: 20px;
     right: 5%;
@@ -380,39 +222,7 @@
     }
 }
 
-/* Responsividade */
-@media (max-width: 1024px) {
-    .location-wrapper {
-        grid-template-columns: 1fr;
-    }
-    
-    .map-container {
-        height: 400px;
-    }
-}
-
-@media (max-width: 768px) {
-    .location-info {
-        grid-template-columns: 1fr;
-    }
-    
-    .location-buttons {
-        flex-direction: column;
-    }
-    
-    .btn-whatsapp,
-    .btn-maps {
-        width: 100%;
-        justify-content: center;
-    }
-    
-    .map-container {
-        height: 350px;
-    }
-}
-</style>
-
-/* Footer com mensagem de Natal */
+/* Footer com mensagem de Natal 
 .footer-bottom::before {
     content: '🎄 Feliz Natal e Próspero Ano Novo! 🎄';
     display: block;
@@ -432,7 +242,7 @@
     50% { transform: scale(1.05); }
 }
 
-/* Responsividade */
+/* Responsividade 
 @media (max-width: 768px) {
     .christmas-banner {
         font-size: 0.85rem;
@@ -446,7 +256,7 @@
     .christmas-lights {
         height: 6px;
     }
-}
+}*/
 
 body {
   background-color: #f5f5f5;
@@ -739,23 +549,54 @@ footer {
   border-bottom: 4px solid #FFDD00;
 }
 
-/* Responsividade */
-@media (max-width: 768px) {
-  .menu {
-    display: none;
-    flex-direction: column;
-    width: 100%;
-    background-color: #0052a5;
-    margin-top: 10px;
+/* =====================================
+   📱 CELULARES (até 480px)
+   ===================================== */
+@media (max-width: 480px) {
+
+  header {
+    padding: 15px 0;
   }
 
-  .menu.active {
-    display: flex;
+  .logo {
+    font-size: 20px;
+    text-align: center;
+    width: 100%;
+  }
+
+  nav {
+    flex-direction: column;
+  }
+
+  .menu {
+    flex-direction: column;
+    width: 100%;
+    text-align: center;
   }
 
   .menu li {
-    margin: 15px 0;
-    text-align: center;
+    margin: 10px 0;
+  }
+
+  .hero {
+    height: auto;
+    padding: 80px 15px;
+  }
+
+  .hero h1 {
+    font-size: 24px;
+  }
+
+  .hero p {
+    font-size: 15px;
+  }
+
+  .services {
+    grid-template-columns: 1fr;
+  }
+
+  .service-img {
+    height: 180px;
   }
 
   .about {
@@ -763,12 +604,36 @@ footer {
     text-align: center;
   }
 
-  .hero h1 {
-    font-size: 28px;
+  .about-img {
+    height: 280px;
   }
 
-  .hero p {
-    font-size: 16px;
+  .testimonials {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-form {
+    padding: 20px;
+  }
+
+  .location-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .location-info {
+    grid-template-columns: 1fr;
+  }
+
+  .location-buttons {
+    flex-direction: column;
+  }
+
+  .map-container {
+    height: 300px;
+  }
+
+  footer {
+    padding: 40px 15px;
   }
 
   .footer-content {
@@ -777,8 +642,103 @@ footer {
   }
 }
 
-/* Imagens adaptáveis */
-img {
-  max-width: 100%;
-  height: auto;
+/* =====================================
+   📲 TABLETS (481px até 1024px)
+   ===================================== */
+@media (min-width: 481px) and (max-width: 1024px) {
+
+  nav {
+    flex-wrap: wrap;
+  }
+
+  .hero {
+    height: auto;
+    padding: 100px 30px;
+  }
+
+  .hero h1 {
+    font-size: 34px;
+  }
+
+  .hero p {
+    font-size: 18px;
+  }
+
+  .services {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .about {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .about-img {
+    height: 350px;
+  }
+
+  .testimonials {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .location-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .location-info {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .map-container {
+    height: 400px;
+  }
+
+  .footer-content {
+    grid-template-columns: repeat(2, 1fr);
+    text-align: center;
+  }
+}
+
+/* =====================================
+   💻 COMPUTADORES (1025px pra cima)
+   ===================================== */
+@media (min-width: 1025px) {
+
+  .hero h1 {
+    font-size: 48px;
+  }
+
+  .hero p {
+    font-size: 20px;
+  }
+
+  .services {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .about {
+    grid-template-columns: 1fr 1fr;
+    text-align: left;
+  }
+
+  .testimonials {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .location-wrapper {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .location-info {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .map-container {
+    height: 600px;
+  }
+
+  .footer-content {
+    grid-template-columns: repeat(4, 1fr);
+    text-align: left;
+  }
 }

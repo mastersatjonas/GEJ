@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assistente G&J Refrigeração</title>
+
+  <!-- Fonte Nunito — uso em todo o chat -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+
+    /* =====================================================
+       MINHAS VARIÁVEIS DE COR E ESTILO
+       Se eu quiser mudar as cores do chat, mexo aqui.
+       ===================================================== */
+    :root {
+      --blue: #1565c0;           /* Azul principal da G&J */
+      --blue-dark: #0d47a1;      /* Azul escuro para hover */
+      --blue-light: #e3f2fd;     /* Azul bem clarinho */
+      --green-wpp: #25d366;      /* Verde do WhatsApp */
+      --green-wpp-dark: #1da851; /* Verde WPP mais escuro para hover */
+      --gray-bg: #f5f7fb;        /* Fundo cinza suave do chat */
+      --gray-border: #e0e7ef;    /* Cor das bordas */
+      --text: #1a2233;           /* Cor do texto principal */
+      --text-muted: #6b7a99;     /* Texto secundário/placeholder */
+      --white: #ffffff;
+      --radius: 16px;            /* Arredondamento dos cantos */
+      --shadow: 0 4px 32px rgba(21,101,192,0.13); /* Sombra do chat */
+    }
+
+    /* Reset básico — zera margin e padding de tudo */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* Centraliza o chat na tela */
+    body {
+      font-family: "Nunito", sans-serif;
+      background: var(--gray-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px 16px;
+    }
+
+    /* =====================================================
+       CAIXA PRINCIPAL DO CHAT
+       ===================================================== */
+    .chat-section {
+      width: 100%;
+      max-width: 520px; /* Largura máxima do chat */
+      display: flex;
+      flex-direction: column;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      border: 1px solid var(--gray-border);
+    }
+
+    /* =====================================================
+       CABEÇALHO AZUL COM O MASCOTE GEL
+       ===================================================== */
+    .chat-header {
+      background: linear-gradient(135deg, #1565c0 0%, #0d47a1 100%);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Foto redonda do mascote no cabeçalho */
+    .header-mascot {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2.5px solid rgba(255,255,255,0.5);
+      background: #fff;
+      flex-shrink: 0;
+    }
+    .header-mascot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      transform: scale(1.15); /* Zoom leve para centralizar o rosto */
+    }
+
+    /* Nome e cidade no cabeçalho */
+    .header-info { flex: 1; }
+    .header-info strong { color: #fff; font-size: 15px; font-weight: 800; display: block; }
+    .header-info span  { color: rgba(255,255,255,0.78); font-size: 12px; }
+
+    /* Bolinha verde "Online" */
+    .header-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.12);
+      padding: 5px 12px;
+      border-radius: 20px;
+    }
+    .status-dot {
+      width: 8px; height: 8px;
+      background: #4cff91;
+      border-radius: 50%;
+      animation: pulse 2s infinite; /* Pisca suavemente */
+    }
+    @keyframes pulse {
+      0%,100% { opacity:1; transform:scale(1); }
+      50%      { opacity:.6; transform:scale(.85); }
+    }
+    .header-status span { color: rgba(255,255,255,.9); font-size: 12px; font-weight: 600; }
+
+    /* =====================================================
+       ÁREA DAS MENSAGENS
+       ===================================================== */
+    .chat-msgs {
+      height: 430px;        /* Altura fixa da caixa de mensagens */
+      overflow-y: auto;     /* Scroll quando encher */
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: var(--gray-bg);
+      scroll-behavior: smooth;
+    }
+
+    /* Barra de scroll fina e discreta */
+    .chat-msgs::-webkit-scrollbar { width: 4px; }
+    .chat-msgs::-webkit-scrollbar-thumb { background: var(--gray-border); border-radius: 4px; }
+
+    /* Cada mensagem (bot ou usuário) */
+    .msg {
+      display: flex;
+      gap: 8px;
+      max-width: 88%;
+      animation: fadeUp .25s ease; /* Entra suavemente de baixo */
+    }
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(8px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    .msg.bot  { align-self: flex-start; }                           /* Bot: lado esquerdo */
+    .msg.user { align-self: flex-end; flex-direction: row-reverse; } /* Eu: lado direito */
+
+    /* Avatar redondo (foto do Gel ou "EU") */
+    .msg-ava {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+      overflow: hidden;
+      background: #fff;
+      border: 1.5px solid var(--gray-border);
+    }
+    .msg-ava img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      transform: scale(1.2);
+    }
+    /* Avatar do usuário (texto "EU") */
+    .msg.user .msg-ava {
+      background: #bbdefb;
+      border-color: #90caf9;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--blue-dark);
+    }
+
+    /* Balão de texto da mensagem */
+    .msg-bub {
+      padding: 10px 14px;
+      border-radius: 16px;
+      font-size: 13.5px;
+      line-height: 1.6;
+      word-break: break-word;
+    }
+    /* Balão do bot — branco com borda */
+    .msg.bot .msg-bub {
+      background: var(--white);
+      color: var(--text);
+      border: 1px solid var(--gray-border);
+      border-bottom-left-radius: 4px; /* Cantinho que aponta pro avatar */
+      box-shadow: 0 1px 4px rgba(0,0,0,.04);
+    }
+    /* Balão do usuário — azul */
+    .msg.user .msg-bub {
+      background: var(--blue);
+      color: #fff;
+      border-bottom-right-radius: 4px; /* Cantinho que aponta pro avatar */
+    }
+
+    /* =====================================================
+       CHIPS DE RESPOSTA RÁPIDA
+       Botõezinhos que aparecem embaixo das mensagens do Gel
+       ===================================================== */
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .chip {
+      background: var(--white);
+      border: 1.5px solid var(--blue);
+      color: var(--blue);
+      padding: 5px 13px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all .15s;
+      font-family: "Nunito", sans-serif;
+    }
+    .chip:hover { background: var(--blue); color: #fff; }
+
+    /* =====================================================
+       ANIMAÇÃO DE "DIGITANDO..." (3 bolinhas)
+       ===================================================== */
+    .typing-wrap {
+      display: flex; gap: 8px;
+      align-self: flex-start;
+      animation: fadeUp .2s ease;
+    }
+    .typing-ava {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      overflow: hidden;
+      background: #fff;
+      border: 1.5px solid var(--gray-border);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .typing-ava img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      transform: scale(1.2);
+    }
+    .typing-bub {
+      background: var(--white);
+      border: 1px solid var(--gray-border);
+      border-radius: 16px;
+      border-bottom-left-radius: 4px;
+      padding: 12px 16px;
+      display: flex; gap: 5px; align-items: center;
+    }
+    /* Cada bolinha da animação */
+    .typing-bub span {
+      width: 7px; height: 7px;
+      background: #90caf9;
+      border-radius: 50%;
+      animation: bounce 1.2s infinite;
+    }
+    .typing-bub span:nth-child(2) { animation-delay: .2s; }
+    .typing-bub span:nth-child(3) { animation-delay: .4s; }
+    @keyframes bounce {
+      0%,60%,100% { transform: translateY(0); }
+      30%          { transform: translateY(-7px); }
+    }
+
+    /* =====================================================
+       BOTÃO VERDE "CONTINUAR NO WHATSAPP"
+       Aparece dentro das mensagens quando necessário
+       ===================================================== */
+    .wpp-inline {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: var(--green-wpp);
+      color: #fff;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 12.5px; font-weight: 700;
+      margin-top: 10px;
+      transition: background .15s;
+      font-family: "Nunito", sans-serif;
+    }
+    .wpp-inline:hover { background: var(--green-wpp-dark); }
+    .wpp-inline svg { width: 15px; height: 15px; fill: #fff; flex-shrink: 0; }
+
+    /* =====================================================
+       RODAPÉ COM O CAMPO DE TEXTO E BOTÕES
+       ===================================================== */
+    .chat-footer {
+      background: var(--white);
+      border-top: 1px solid var(--gray-border);
+      padding: 12px 14px;
+      display: flex; gap: 8px; align-items: center;
+    }
+
+    /* Campo onde o cliente digita */
+    .chat-footer input {
+      flex: 1;
+      border: 1.5px solid var(--gray-border);
+      border-radius: 24px;
+      padding: 10px 18px;
+      font-size: 13.5px;
+      font-family: "Nunito", sans-serif;
+      outline: none;
+      background: var(--gray-bg);
+      color: var(--text);
+      transition: border-color .15s;
+    }
+    .chat-footer input:focus { border-color: var(--blue); background: var(--white); }
+    .chat-footer input::placeholder { color: var(--text-muted); }
+
+    /* Botão azul de enviar mensagem */
+    .send-btn {
+      width: 42px; height: 42px;
+      background: var(--blue);
+      border: none; border-radius: 50%;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: background .15s, transform .1s;
+    }
+    .send-btn:hover  { background: var(--blue-dark); }
+    .send-btn:active { transform: scale(.93); }
+    .send-btn svg { width: 17px; height: 17px; fill: #fff; }
+
+    /* Botão verde do WhatsApp (sempre visível no rodapé) */
+    .wpp-footer-btn {
+      width: 42px; height: 42px;
+      background: var(--green-wpp);
+      border: none; border-radius: 50%;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: background .15s;
+      text-decoration: none;
+    }
+    .wpp-footer-btn:hover { background: var(--green-wpp-dark); }
+    .wpp-footer-btn svg { width: 20px; height: 20px; fill: #fff; }
+
+    /* Texto pequeno no fundo do chat */
+    .chat-disclaimer {
+      background: var(--white);
+      border-top: 1px solid var(--gray-border);
+      padding: 8px 16px;
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* =====================================================
+       RESPONSIVO — Celular
+       No celular o chat ocupa a tela toda
+       ===================================================== */
+    @media (max-width: 560px) {
+      body { padding: 0; align-items: flex-start; }
+      .chat-section { border-radius: 0; max-width: 100%; min-height: 100vh; }
+      .chat-msgs { height: calc(100vh - 230px); }
+    }
+
+  </style>
+</head>
+<body>
+
+<!-- =====================================================
+     ESTRUTURA HTML DO CHAT
+     ===================================================== -->
+<section class="chat-section">
+
+  <!-- Cabeçalho com mascote, nome e status online -->
+  <div class="chat-header">
+    <div class="header-mascot">
+      <!-- Imagem do Gel — fica na pasta /img do meu projeto -->
+      <img id="mascot-img" src="/img/mascote-gej.png" alt="Gel o Pinguim" />
+    </div>
+    <div class="header-info">
+      <strong>G&amp;J Refrigeração</strong>
+      <span>Assistente Virtual • Augustinópolis - TO</span>
+    </div>
+    <div class="header-status">
+      <div class="status-dot"></div>
+      <span>Online</span>
+    </div>
+  </div>
+
+  <!-- Aqui as mensagens aparecem dinamicamente via JavaScript -->
+  <div class="chat-msgs" id="msgs"></div>
+
+  <!-- Rodapé: campo de texto + botão WhatsApp + botão enviar -->
+  <div class="chat-footer">
+    <input type="text" id="chat-input" placeholder="Digite sua dúvida..." />
+
+    <!-- Botão verde fixo do WhatsApp — atualiza automaticamente com contexto -->
+    <a class="wpp-footer-btn" id="wpp-btn"
+       href="https://wa.me/5563992354732?text=Olá! Vim pelo site e preciso de ajuda."
+       target="_blank" title="Falar no WhatsApp">
+      <svg viewBox="0 0 24 24">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22C6.486 22 2 17.514 2 12S6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/>
+      </svg>
+    </a>
+
+    <!-- Botão azul de enviar -->
+    <button class="send-btn" onclick="sendMsg()">
+      <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+    </button>
+  </div>
+
+  <!-- Rodapé informativo -->
+  <div class="chat-disclaimer">Assistente com IA • Para urgências use o botão verde 💬</div>
+
+</section>
+
+
+<!-- =====================================================
+     JAVASCRIPT — TODA A LÓGICA DO BOT
+     ===================================================== -->
+<script>
+
+  // ── CONFIGURAÇÕES PRINCIPAIS ──────────────────────────
+  // Minha chave da API do Groq (gratuita e sem CORS)
+  // Se precisar trocar a chave, só mudar aqui
+  const GROQ_KEY = 'GROQ_API_KEY_PLACEHOLDER';
+
+  // URL da API do Groq — usa o modelo LLaMA 3 (rápido e gratuito)
+  const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
+
+  // Meu número do WhatsApp (com código do país, sem + ou espaços)
+  const WPP_NUMBER = '5563992354732';
+  const WPP_BASE   = 'https://wa.me/' + WPP_NUMBER + '?text=';
+
+  // Referência ao botão verde do WhatsApp no rodapé
+  const WPP_BTN = document.getElementById('wpp-btn');
+
+
+  // ── PERSONALIDADE DO GELE (INSTRUÇÕES PARA A IA) ──────
+  // Aqui eu defino como o Gele deve se comportar.
+  // Se quiser mudar o tom, adicionar serviços ou alterar
+  // informações da empresa, é só editar este texto.
+  const SYSTEM = `Você é o Gele 🐧, mascote e assistente virtual simpático da G&J Refrigeração, em Augustinópolis - TO.
+Sou um pinguim técnico animado que adora resolver problemas de refrigeração!
+Use linguagem informal e bem-humorada, com emojis moderados.
+
+DADOS DA EMPRESA:
+- Endereço: Av. Goiás, 1262 - Centro, Augustinópolis - TO
+- Telefone: (63) 9 9975-4964
+- WhatsApp: (63) 9 9235-4732
+- Email: gjrefrigeracao.l.f@gmail.com
+- Horário: Segunda a Sexta das 8h às 18h | Plantão 24h para emergências
+- Experiência: mais de 6 anos no mercado
+
+SERVIÇOS QUE OFEREÇO:
+• Instalação de ar condicionado (split, piso-teto, janela, central)
+• Manutenção preventiva de ar condicionado
+• Reparo de ar condicionado, geladeira, freezer e máquina de lavar
+• Limpeza completa de máquina de lavar
+• Atendimento residencial e comercial
+
+REGRAS DE COMPORTAMENTO:
+1. Respostas curtas — máximo 3 linhas por mensagem.
+2. Nunca inventar preços. Orçamento é feito presencialmente ou via WhatsApp.
+3. Para agendamento: coletar NOME, ENDEREÇO, EQUIPAMENTO e PROBLEMA — um dado por vez, com calma.
+4. Quando tiver todos os dados do agendamento, incluir EXATAMENTE no fim da resposta:
+
+WHATSAPP_MSG:Olá! Quero agendar uma visita técnica. 🐧
+👤 Nome: [nome]
+📍 Endereço: [endereço]
+🔧 Equipamento: [equipamento]
+❓ Problema: [problema]
+
+5. Se não souber responder, o assunto for complexo ou o cliente pedir humano — incluir PRECISA_WPP no fim.
+6. Não se apresentar novamente se já cumprimentou antes.`;
+
+
+  // ── VARIÁVEIS DE CONTROLE ─────────────────────────────
+  const msgsEl  = document.getElementById('msgs');       // Caixa de mensagens
+  const inputEl = document.getElementById('chat-input'); // Campo de texto
+  let history   = []; // Histórico da conversa (mantém contexto com a IA)
+  let lastCall  = 0;  // Timestamp da última chamada à API (controle de rate limit)
+  const COOLDOWN = 3000; // Mínimo de 3 segundos entre mensagens
+
+  // Ícone SVG do WhatsApp (reutilizo em vários lugares)
+  const WPP_SVG = `<svg viewBox="0 0 24 24" width="15" height="15" style="fill:#fff;flex-shrink:0">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+    <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22C6.486 22 2 17.514 2 12S6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/>
+  </svg>`;
+
+
+  // ── FUNÇÕES AUXILIARES ────────────────────────────────
+
+  // Rola a tela para baixo após cada mensagem nova
+  function scrollDown() {
+    setTimeout(() => msgsEl.scrollTop = msgsEl.scrollHeight, 50);
+  }
+
+  // Cria o avatar redondo do Gel (foto do pinguim)
+  function makeBotAva() {
+    const d   = document.createElement('div');
+    d.className = 'msg-ava';
+    const img = document.createElement('img');
+    img.src   = '/img/mascote-gej.png';
+    img.alt   = 'Gele';
+    d.appendChild(img);
+    return d;
+  }
+
+  // Adiciona uma mensagem na tela (bot ou usuário)
+  // role  = 'bot' ou 'user'
+  // html  = conteúdo da mensagem (pode ter HTML)
+  // chips = array de botões de resposta rápida (opcional)
+  function addMsg(role, html, chips = []) {
+    const wrap  = document.createElement('div');
+    wrap.className = 'msg ' + role;
+
+    const inner = document.createElement('div');
+    const bub   = document.createElement('div');
+    bub.className  = 'msg-bub';
+    bub.innerHTML  = html;
+    inner.appendChild(bub);
+
+    // Se tiver chips, cria os botõezinhos embaixo da mensagem
+    if (chips.length) {
+      const cw = document.createElement('div');
+      cw.className = 'chips';
+      chips.forEach(c => {
+        const btn       = document.createElement('button');
+        btn.className   = 'chip';
+        btn.textContent = c;
+        btn.onclick     = () => send(c); // Clicou no chip = envia como mensagem
+        cw.appendChild(btn);
+      });
+      inner.appendChild(cw);
+    }
+
+    // Bot: avatar à esquerda | Usuário: "EU" à direita
+    if (role === 'bot') {
+      wrap.appendChild(makeBotAva());
+      wrap.appendChild(inner);
+    } else {
+      const a       = document.createElement('div');
+      a.className   = 'msg-ava';
+      a.textContent = 'EU';
+      wrap.appendChild(a);
+      wrap.appendChild(inner);
+    }
+
+    msgsEl.appendChild(wrap);
+    scrollDown();
+  }
+
+  // Mostra as 3 bolinhas de "digitando..." enquanto a IA processa
+  function showTyping() {
+    const t  = document.createElement('div');
+    t.className = 'typing-wrap';
+    t.id        = 'typing';
+
+    const ta  = document.createElement('div');
+    ta.className = 'typing-ava';
+    const img = document.createElement('img');
+    img.src   = '/img/mascote-gej.png';
+    img.alt   = 'Gel digitando';
+    ta.appendChild(img);
+
+    const tb  = document.createElement('div');
+    tb.className  = 'typing-bub';
+    tb.innerHTML  = '<span></span><span></span><span></span>';
+
+    t.appendChild(ta);
+    t.appendChild(tb);
+    msgsEl.appendChild(t);
+    scrollDown();
+  }
+
+  // Remove as bolinhas de "digitando..."
+  function hideTyping() {
+    const t = document.getElementById('typing');
+    if (t) t.remove();
+  }
+
+
+  // ── PROCESSAMENTO DA RESPOSTA DA IA ──────────────────
+  // Aqui eu trato a resposta bruta do Gemini:
+  // - Detecta se precisa abrir o WhatsApp
+  // - Extrai a mensagem formatada para o WhatsApp
+  // - Adiciona o botão verde se necessário
+  function processReply(raw) {
+    let text    = raw;
+    let wppMsg  = 'Olá! Vim pelo site e preciso de ajuda. 🐧';
+    let openWpp = false;
+
+    // Detecta mensagem de agendamento para WhatsApp
+    const m = text.match(/WHATSAPP_MSG:([\s\S]+?)(?=PRECISA_WPP|$)/);
+    if (m) {
+      wppMsg  = m[1].trim();
+      text    = text.replace(/WHATSAPP_MSG:[\s\S]+/, '').trim();
+      openWpp = true;
+    }
+
+    // Detecta flag de encaminhamento para humano
+    if (text.includes('PRECISA_WPP')) {
+      text    = text.replace('PRECISA_WPP', '').trim();
+      openWpp = true;
+    }
+
+    // Converte quebras de linha em <br> para exibir no HTML
+    text = text.replace(/\n/g, '<br>');
+    let html = text;
+
+    // Se precisar do WhatsApp, adiciona o botão verde e atualiza
+    // o link do botão do rodapé com o contexto da conversa
+    if (openWpp) {
+      const link   = WPP_BASE + encodeURIComponent(wppMsg);
+      WPP_BTN.href = link; // Atualiza botão do rodapé com contexto
+      html += `<br><a class="wpp-inline" href="${link}" target="_blank">${WPP_SVG} Continuar no WhatsApp</a>`;
+    }
+
+    return html;
+  }
+
+
+  // ── CHIPS INTELIGENTES ────────────────────────────────
+  // Detecta o assunto da resposta e sugere chips relevantes
+  function detectChips(t) {
+    t = t.toLowerCase();
+    if (t.includes('agendar')      || t.includes('visita'))   return ['📅 Agendar agora', '📋 Pedir orçamento'];
+    if (t.includes('ar condicion') || t.includes('split'))    return ['🔧 Manutenção', '⚙️ Instalação', '📋 Orçamento'];
+    if (t.includes('geladeira')    || t.includes('freezer'))  return ['🔧 Solicitar reparo', '📋 Orçamento'];
+    if (t.includes('lavar')        || t.includes('lavadora')) return ['🔧 Solicitar reparo', '🧼 Limpeza'];
+    return []; // Sem chips se não identificar o assunto
+  }
+
+
+  // ── FUNÇÃO PRINCIPAL: ENVIA MENSAGEM PARA A IA ───────
+  async function send(text) {
+    if (!text.trim()) return; // Ignora mensagem vazia
+
+    // Controle de rate limit — evita muitas chamadas seguidas
+    const now = Date.now();
+    if (now - lastCall < COOLDOWN) {
+      const wait = Math.ceil((COOLDOWN - (now - lastCall)) / 1000);
+      addMsg('bot', `Calma aí! 😄 Aguarda <strong>${wait} segundo${wait > 1 ? 's' : ''}</strong> antes da próxima mensagem.`);
+      return;
+    }
+    lastCall = now;
+
+    // Mostra a mensagem do usuário na tela
+    addMsg('user', text);
+
+    // Adiciona ao histórico (a IA precisa do contexto anterior)
+    // Groq usa formato OpenAI: { role, content } em vez de { role, parts }
+    history.push({ role: 'user', content: text });
+
+    // Mostra as bolinhas de "digitando..."
+    showTyping();
+
+    try {
+      // Monta o corpo da requisição para o Groq (formato OpenAI)
+      const body = {
+        model: 'llama-3.3-70b-versatile', // Modelo LLaMA 3 — rápido e gratuito
+        messages: [
+          { role: 'system', content: SYSTEM }, // Personalidade do Gel
+          ...history                            // Histórico da conversa
+        ],
+        max_tokens: 500,  // Máximo de tokens na resposta
+        temperature: 0.7  // 0 = robótico | 1 = mais criativo
+      };
+
+      // Chama a API do Groq
+      const res = await fetch(GROQ_URL, {
+        method:  'POST',
+        headers: {
+          'Content-Type':  'application/json',
+          'Authorization': 'Bearer ' + GROQ_KEY // Autenticação com minha chave
+        },
+        body: JSON.stringify(body)
+      });
+
+      // Verifica se a resposta HTTP foi OK
+      if (!res.ok) {
+        const err = await res.text();
+        console.error('Groq erro HTTP:', res.status, err);
+        throw new Error('HTTP ' + res.status);
+      }
+
+      const data = await res.json();
+      console.log('Groq resposta:', data); // Debug no console do navegador
+
+      // Extrai o texto da resposta (formato OpenAI)
+      const raw = data.choices?.[0]?.message?.content;
+
+      // Se não veio texto, loga o erro
+      if (!raw) {
+        console.warn('Sem texto na resposta:', data);
+        throw new Error('empty');
+      }
+
+      // Adiciona resposta da IA ao histórico para manter contexto
+      history.push({ role: 'assistant', content: raw });
+
+      // Remove bolinhas e mostra a resposta processada
+      hideTyping();
+      addMsg('bot', processReply(raw), detectChips(raw));
+
+    } catch(e) {
+      // Loga o erro para diagnóstico
+      console.error('Erro ao chamar Gemini:', e);
+
+      // Resposta de fallback amigável baseada no que o usuário perguntou
+      hideTyping();
+      const t = text.toLowerCase();
+      let fallback = '';
+
+      if (t.includes('horário') || t.includes('hora') || t.includes('funciona')) {
+        fallback = 'Atendemos de <strong>Segunda a Sexta das 8h às 18h</strong> 🕗<br>E temos <strong>plantão 24h</strong> para emergências! 🚨';
+      } else if (t.includes('endereço') || t.includes('onde') || t.includes('localiz')) {
+        fallback = 'Estamos na <strong>Av. Goiás, 1262 - Centro</strong>, Augustinópolis - TO 📍<br>Fale com a gente pelo WhatsApp!';
+      } else if (t.includes('preço') || t.includes('valor') || t.includes('custo') || t.includes('orçamento')) {
+        fallback = 'O orçamento é feito pelo nosso técnico, sem custo! 😊<br>Clica no botão abaixo pra solicitar:';
+      } else if (t.includes('telefone') || t.includes('contato') || t.includes('ligar')) {
+        fallback = 'Nosso telefone é <strong>(63) 9 9975-4964</strong> 📞<br>Ou fale pelo WhatsApp: <strong>(63) 9 9235-4732</strong>';
+      } else {
+        fallback = 'Oi! Tive um probleminha técnico agora 😅<br>Mas posso te atender direto pelo WhatsApp! 👇';
+      }
+
+      const link = WPP_BASE + encodeURIComponent('Olá! Vim pelo site e preciso de ajuda. 🐧');
+      addMsg('bot', `${fallback}<br><a class="wpp-inline" href="${link}" target="_blank">${WPP_SVG} Falar no WhatsApp</a>`);
+    }
+  }
+
+
+  // ── ENVIO POR BOTÃO E TECLA ENTER ────────────────────
+  function sendMsg() {
+    const v = inputEl.value.trim();
+    if (!v) return;
+    inputEl.value = ''; // Limpa o campo após enviar
+    send(v);
+  }
+
+  // Pressionar Enter no campo de texto também envia
+  inputEl.addEventListener('keydown', e => {
+    if (e.key === 'Enter') sendMsg();
+  });
+
+
+  // ── MENSAGEM DE BOAS-VINDAS ───────────────────────────
+  // Aparece automaticamente quando a página carrega
+  window.addEventListener('DOMContentLoaded', () => {
+    addMsg(
+      'bot',
+      'Oi! Sou o <strong>Gele</strong> 🐧, mascote e assistente da <strong>G&J Refrigeração</strong>! Como posso te ajudar hoje? 😊',
+      [
+        '💨 Ar condicionado',
+        '🧊 Geladeira / Freezer',
+        '👕 Máquina de lavar',
+        '📋 Solicitar orçamento',
+        '📅 Agendar visita técnica',
+        '⏰ Horários e contato'
+      ]
+    );
+  });
+
+</script>
+</body>
+</html>
