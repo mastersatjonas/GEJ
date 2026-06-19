@@ -4,22 +4,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>G&J Refrigeração - Eletricidade</title>
+    <title>G&J Refrigeração - A Seleção Campeã Contra o Calor</title>
+
+    <meta name="description" content="G&J Refrigeração e Eletricidade em Augustinópolis-TO. Instalação, manutenção e reparo de ar-condicionado, geladeiras, freezers e lavadoras. Atendimento 24h.">
+    <meta name="keywords" content="refrigeração, ar condicionado, manutenção, Augustinópolis, Tocantins, conserto geladeira, G&J Refrigeração">
+    <meta name="author" content="G&J Refrigeração">
+
+    <meta property="og:title" content="G&J Refrigeração - A Seleção Campeã Contra o Calor">
+    <meta property="og:description" content="Na temporada da Copa, a G&J entra em campo para vencer o calor. Chame no WhatsApp e solicite seu orçamento.">
+    <meta property="og:type" content="website">
+
     <link rel="stylesheet" href="style.css">
 
-    <!-- Estilo do botão flutuante do Gel e do popup do chat -->
     <style>
-        /* =====================================================
-           BOTÃO FLUTUANTE DO GEL 🐧
-           Fica no canto inferior direito, acima do botão
-           do WhatsApp. Ao clicar, abre o chat popup.
-           ===================================================== */
-
-        /* Wrapper que agrupa o botão e o balão de chamada */
         .gel-float-wrapper {
             position: fixed;
             bottom: 90px;
-            /* Fica acima do botão do WhatsApp */
             right: 20px;
             z-index: 9999;
             display: flex;
@@ -28,25 +28,22 @@
             gap: 8px;
         }
 
-        /* Balãozinho de texto "Precisa de ajuda?" */
         .gel-bubble {
             background: #fff;
             border: 1.5px solid #e0e7ef;
             border-radius: 12px 12px 0 12px;
             padding: 8px 14px;
             font-size: 13px;
-            font-weight: 700;
-            color: #1565c0;
-            box-shadow: 0 4px 16px rgba(21, 101, 192, 0.15);
+            font-weight: 800;
+            color: #0057ff;
+            box-shadow: 0 4px 16px rgba(0, 87, 255, 0.2);
             white-space: nowrap;
             animation: bobble 3s ease-in-out infinite;
             font-family: sans-serif;
         }
 
         @keyframes bobble {
-
-            0%,
-            100% {
+            0%, 100% {
                 transform: translateY(0);
             }
 
@@ -55,14 +52,13 @@
             }
         }
 
-        /* Botão redondo com a foto do mascote */
         .gel-float-btn {
             width: 62px;
             height: 62px;
             border-radius: 50%;
-            background: #1565c0;
-            border: 3px solid #fff;
-            box-shadow: 0 4px 20px rgba(21, 101, 192, 0.35);
+            background: #00b140;
+            border: 3px solid #ffd700;
+            box-shadow: 0 4px 20px rgba(0, 177, 64, 0.4);
             cursor: pointer;
             overflow: hidden;
             transition: transform 0.2s, box-shadow 0.2s;
@@ -73,7 +69,7 @@
 
         .gel-float-btn:hover {
             transform: scale(1.08);
-            box-shadow: 0 6px 28px rgba(21, 101, 192, 0.45);
+            box-shadow: 0 6px 28px rgba(255, 215, 0, 0.45);
         }
 
         .gel-float-btn img {
@@ -84,7 +80,10 @@
             transform: scale(1.2);
         }
 
-        /* Bolinha vermelha de notificação no botão */
+        .gel-btn-container {
+            position: relative;
+        }
+
         .gel-notif {
             position: absolute;
             top: 0;
@@ -103,30 +102,17 @@
             font-family: sans-serif;
         }
 
-        /* Container relativo para posicionar a notificação */
-        .gel-btn-container {
-            position: relative;
-        }
-
-        /* =====================================================
-           POPUP DO CHAT
-           Abre quando o usuário clica no botão do Gel.
-           Aparece acima do botão flutuante.
-           ===================================================== */
         .gel-chat-popup {
             position: fixed;
             bottom: 170px;
-            /* Fica acima do botão do Gel */
             right: 20px;
             width: 360px;
             height: min(580px, calc(100vh - 190px));
             z-index: 9998;
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 8px 40px rgba(21, 101, 192, 0.25);
+            box-shadow: 0 8px 40px rgba(0, 87, 255, 0.35);
             border: 1px solid #e0e7ef;
-
-            /* Começa escondido — aparece com animação ao clicar */
             opacity: 0;
             transform: scale(0.85) translateY(20px);
             transform-origin: bottom right;
@@ -134,14 +120,12 @@
             transition: opacity 0.25s ease, transform 0.25s ease;
         }
 
-        /* Estado ativo — chat visível */
         .gel-chat-popup.open {
             opacity: 1;
             transform: scale(1) translateY(0);
             pointer-events: all;
         }
 
-        /* Iframe do chat ocupa todo o popup */
         .gel-chat-popup iframe {
             width: 100%;
             height: 100%;
@@ -149,7 +133,6 @@
             display: block;
         }
 
-        /* Responsivo — no celular o popup fica maior */
         @media (max-width: 420px) {
             .gel-chat-popup {
                 width: calc(100vw - 16px);
@@ -168,81 +151,64 @@
 
 <body>
 
-    <!-- =====================================================
-         BOTÃO FLUTUANTE DO GEL 🐧
-         Fica fixo no canto inferior direito.
-         Clique abre/fecha o chat popup.
-         ===================================================== -->
     <div class="gel-float-wrapper">
+        <div class="gel-bubble" id="gel-bubble">⚽ O técnico Gel está online!</div>
 
-        <!-- Balãozinho de chamada (some depois que o chat é aberto) -->
-        <div class="gel-bubble" id="gel-bubble">💬 Precisa de ajuda?</div>
-
-        <!-- Botão com a foto do Gel -->
         <div class="gel-btn-container">
             <button class="gel-float-btn" onclick="toggleChat()" title="Falar com o Gel 🐧">
-                <!-- Imagem do mascote — está na pasta /img do projeto -->
-                <img src="./img/mascote-gej.png" alt="Gel - Assistente G&J" />
+                <img src="./img/mascote-gej.png" alt="Gel - Assistente G&J">
             </button>
-            <!-- Bolinha vermelha "1" de notificação -->
             <div class="gel-notif" id="gel-notif">1</div>
         </div>
-
     </div>
 
-    <!-- Popup do chat — começa escondido, abre ao clicar no botão -->
     <div class="gel-chat-popup" id="gel-chat-popup">
-        <!-- O iframe carrega o arquivo gj-chat-bot.html -->
-        <!-- IMPORTANTE: o arquivo gj-chat-bot.html deve estar na raiz do projeto -->
-        <iframe src="./gj-chat-bot.html" title="Assistente Virtual Gel - G&J Refrigeração">
-        </iframe>
+        <iframe src="./gj-chat-bot.html" title="Assistente Virtual Gel - G&J Refrigeração"></iframe>
     </div>
 
-    <!-- Script que controla abrir/fechar o chat -->
     <script>
         let chatAberto = false;
 
         function toggleChat() {
             chatAberto = !chatAberto;
+
             const popup = document.getElementById('gel-chat-popup');
             const bubble = document.getElementById('gel-bubble');
             const notif = document.getElementById('gel-notif');
 
             if (chatAberto) {
-                // Abre o chat
                 popup.classList.add('open');
-                // Esconde o balãozinho e a notificação depois que abriu
                 bubble.style.display = 'none';
                 notif.style.display = 'none';
             } else {
-                // Fecha o chat
                 popup.classList.remove('open');
             }
         }
 
-        // Esconde o balãozinho após 6 segundos automaticamente
         setTimeout(() => {
             const bubble = document.getElementById('gel-bubble');
             if (bubble) bubble.style.opacity = '0';
-            setTimeout(() => { if (bubble) bubble.style.display = 'none'; }, 500);
+
+            setTimeout(() => {
+                if (bubble) bubble.style.display = 'none';
+            }, 500);
         }, 6000);
     </script>
 
-
-    <!-- ============================================
-         HEADER
-         ============================================ -->
-    <header class="christmas-header">
+    <header class="cup-header">
         <div class="container">
             <nav>
                 <div class="logo" style="display:flex;align-items:center;gap:10px;">
                     <img src="./img/mascote-gej.png" alt="Gel"
-                        style="width:48px;height:48px;border-radius:50%;object-fit:cover;object-position:center top;transform:scale(1.1);border:2px solid rgba(255,255,255,0.5);background:#fff;">
+                        style="width:48px;height:48px;border-radius:50%;object-fit:cover;object-position:center top;transform:scale(1.1);border:2px solid rgba(255,255,255,0.8);background:#fff;">
                     G&J<span>REFRIGERAÇÃO</span>
                 </div>
+
                 <ul class="menu">
                     <li><a href="#inicio">Início</a></li>
+                    <li><a href="#promocao-copa">Promoção Copa</a></li>
                     <li><a href="#servicos">Serviços</a></li>
+                    <li><a href="#marcas">Marcas</a></li>
                     <li><a href="#sobre">Sobre Nós</a></li>
                     <li><a href="#depoimentos">Depoimentos</a></li>
                     <li><a href="#contato">Contato</a></li>
@@ -251,205 +217,381 @@
         </div>
     </header>
 
-    <!-- ============================================
-         HERO
-         ============================================ -->
-    <section id="inicio" class="hero">
-        <h1>Soluções Completas em Refrigeração e Eletrodoméstico</h1>
-        <p>Oferecemos serviços de qualidade para instalação, manutenção e reparo de sistemas de refrigeração, ar
-            condicionado, Máquinas de lavar e outros, para residências e empresas.</p>
-        <a href="#contato" class="btn">Solicite um Orçamento</a>
+    <div class="cup-banner">
+        🏆 TEMPORADA DA COPA: enquanto a torcida esquenta, a G&J deixa tudo gelado! ⚽❄️
+    </div>
+
+    <section id="inicio" class="hero cup-hero">
+        <div class="hero-overlay"></div>
+
+        <div class="container hero-content">
+            <span class="hero-tag">⚽ G&J Refrigeração entra em campo contra o calor</span>
+
+            <h1>A Seleção Campeã Contra o Calor</h1>
+
+            <p>
+                Instalação, manutenção e reparos em ar-condicionado, geladeiras, freezers e lavadoras.
+                Na temporada da Copa, deixe sua casa, comércio ou torcida no clima certo: gelado e confortável.
+            </p>
+
+            <div class="hero-highlights">
+                <div class="highlight-item">🏆 Atendimento campeão</div>
+                <div class="highlight-item">❄️ Ar gelando de verdade</div>
+                <div class="highlight-item">📞 Plantão 24h</div>
+            </div>
+
+            <div class="hero-buttons">
+                <a href="#contato" class="btn btn-copa">⚽ Solicitar Orçamento</a>
+                <a href="https://wa.me/5563992354732?text=Olá!%20Vim%20pelo%20site%20da%20G%26J%20e%20quero%20um%20orçamento%20da%20promoção%20da%20Copa."
+                    target="_blank" class="btn btn-whatsapp-copa">
+                    🏆 Chamar no WhatsApp
+                </a>
+            </div>
+        </div>
     </section>
 
-    <!-- ============================================
-         SERVIÇOS
-         ============================================ -->
+    <section id="promocao-copa" class="cup-promo section">
+        <div class="container">
+            <h2 class="section-title">Escalação Campeã da G&J</h2>
+            <p class="section-subtitle">
+                Serviços preparados para sua casa ou empresa vencer o calor durante os jogos.
+            </p>
+
+            <div class="cup-cards">
+                <div class="cup-card">
+                    <div class="cup-icon">🥅</div>
+                    <h3>Gol de Placa na Instalação</h3>
+                    <p>Instalação de ar-condicionado split, piso teto, janela e sistemas comerciais.</p>
+                </div>
+
+                <div class="cup-card featured">
+                    <div class="cup-icon">⚽</div>
+                    <h3>Combo Torcida Gelada</h3>
+                    <p>Manutenção preventiva para deixar o ar pronto antes da bola rolar.</p>
+                </div>
+
+                <div class="cup-card">
+                    <div class="cup-icon">🧤</div>
+                    <h3>Defesa Contra Emergências</h3>
+                    <p>Reparos em ar-condicionado, geladeiras, freezers e lavadoras.</p>
+                </div>
+            </div>
+
+            <div class="cup-callout">
+                <h3>Não deixe o calor ganhar esse jogo.</h3>
+                <p>Chame a G&J e prepare seus equipamentos para a temporada mais quente.</p>
+                <a href="https://wa.me/5563992354732?text=Olá!%20Quero%20aproveitar%20a%20campanha%20da%20Copa%20da%20G%26J."
+                    target="_blank" class="btn btn-copa">
+                    Quero entrar no clima da Copa
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <h3>+500</h3>
+                    <p>Clientes Atendidos</p>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">🛠️</div>
+                    <h3>+1000</h3>
+                    <p>Serviços Realizados</p>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">⭐</div>
+                    <h3>98%</h3>
+                    <p>Satisfação dos Clientes</p>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">🏆</div>
+                    <h3>6+</h3>
+                    <p>Anos de Experiência</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="emergency-section">
+        <div class="container">
+            <div class="emergency-box">
+                <div>
+                    <h2>🚨 Emergência? A G&J entra em campo 24h!</h2>
+                    <p>Atendimento para urgências em refrigeração, climatização e eletrodomésticos.</p>
+                </div>
+
+                <a href="tel:+5563999754964" class="btn btn-emergency">
+                    📞 Ligar Agora
+                </a>
+            </div>
+        </div>
+    </section>
+
     <section id="servicos" class="section">
         <div class="container">
             <h2 class="section-title">Nossos Serviços</h2>
+            <p class="section-subtitle">Da instalação ao reparo: a G&J resolve.</p>
+
             <div class="services">
                 <div class="service-card">
                     <img src="./img/intalação.jpg" alt="Instalação de Ar Condicionado Split" class="service-img">
                     <div class="service-content">
                         <h3>Instalação de Ar Condicionado Split</h3>
-                        <p>Instalação profissional de sistemas de ar condicionado split, janela e centrais para
-                            ambientes residenciais e comerciais.</p>
+                        <p>Instalação profissional de sistemas split, janela e centrais para ambientes residenciais e comerciais.</p>
                     </div>
                 </div>
+
                 <div class="service-card">
                     <img src="./img/instalação piso teto.jpg" alt="Instalação Piso Teto" class="service-img">
                     <div class="service-content">
                         <h3>Instalação Piso Teto</h3>
-                        <p>Instalação profissional de sistemas de ar condicionado piso teto, janela e centrais para
-                            ambientes residenciais e comerciais.</p>
+                        <p>Instalação de sistemas piso teto para empresas, igrejas, lojas, salões e grandes ambientes.</p>
                     </div>
                 </div>
+
                 <div class="service-card">
                     <img src="./img/serviços.jpeg" alt="Instalação Residencial" class="service-img">
                     <div class="service-content">
                         <h3>Instalação Residencial</h3>
-                        <p>Instalação de sistemas de ar condicionado split para residências com garantia e qualidade.
-                        </p>
+                        <p>Instalação com acabamento, segurança, qualidade e garantia para sua residência.</p>
                     </div>
                 </div>
+
                 <div class="service-card">
                     <img src="./img/manutenção.jpeg" alt="Manutenção Preventiva" class="service-img">
                     <div class="service-content">
                         <h3>Manutenção Preventiva</h3>
-                        <p>Serviços de manutenção periódica para garantir o funcionamento eficiente e prolongar a vida
-                            útil dos seus equipamentos.</p>
+                        <p>Limpeza, revisão e prevenção para manter seu equipamento eficiente e econômico.</p>
                     </div>
                 </div>
+
                 <div class="service-card">
                     <img src="./img/reparo.jpg" alt="Reparos e Consertos" class="service-img">
                     <div class="service-content">
                         <h3>Reparos e Consertos</h3>
-                        <p>Diagnóstico preciso e reparo de problemas em sistemas de refrigeração, ar condicionado e
-                            climatização de todos os modelos.</p>
+                        <p>Diagnóstico e solução para falhas em refrigeração, climatização e eletrodomésticos.</p>
                     </div>
                 </div>
+
                 <div class="service-card">
                     <img src="./img/reparo em lavadora.jpg" alt="Reparo em Lavadora" class="service-img">
                     <div class="service-content">
                         <h3>Reparo em Lavadora</h3>
-                        <p>Reparo com troca de peças em máquina de lavar roupa.</p>
+                        <p>Conserto e troca de peças em máquinas de lavar roupa de várias marcas.</p>
                     </div>
                 </div>
+
                 <div class="service-card">
                     <img src="./img/reparo em geladeira.jpg" alt="Reparo em Geladeira" class="service-img">
                     <div class="service-content">
                         <h3>Reparo em Geladeira</h3>
-                        <p>Reparo com troca de peças em geladeira.</p>
+                        <p>Reparo em geladeiras e freezers com serviço rápido, seguro e com garantia.</p>
                     </div>
                 </div>
+
                 <div class="service-card">
                     <img src="./img/manutenção em lavadora.jpg" alt="Manutenção e Limpeza" class="service-img">
                     <div class="service-content">
                         <h3>Manutenção e Limpeza</h3>
-                        <p>Limpeza completa em máquina de lavar para evitar futuros danos nas peças.</p>
+                        <p>Limpeza completa em lavadoras para evitar mau cheiro, desgaste e problemas futuros.</p>
                     </div>
                 </div>
+
                 <div class="service-card">
                     <img src="./img/tubulação em freezer.jpeg" alt="Troca de Tubulação" class="service-img">
                     <div class="service-content">
                         <h3>Troca de Tubulação</h3>
-                        <p>Troca de tubulação em freezer.</p>
+                        <p>Troca de tubulação em freezers e sistemas de refrigeração com material de qualidade.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ============================================
-         SOBRE
-         ============================================ -->
-    <section id="sobre" class="section highlighted-section">
+    <section id="marcas" class="brands-section section">
         <div class="container">
-            <h2 class="section-title">Sobre Nossa Empresa</h2>
-            <div class="about">
-                <img src="./img/nos.png" alt="Nossa equipe de técnicos" class="about-img">
-                <div class="about-content">
-                    <h3>Mais de 6 anos de experiência</h3>
-                    <p>Nossa empresa foi fundada com a missão de oferecer soluções de qualidade em refrigeração e
-                        climatização. Contamos com uma equipe de técnicos especializados e certificados, prontos para
-                        atender às suas necessidades.</p>
-                    <p>Trabalhamos com as melhores marcas do mercado e oferecemos garantia em todos os nossos serviços.
-                        Nossa prioridade é a satisfação total dos nossos clientes, por isso investimos constantemente em
-                        treinamento e equipamentos de última geração.</p>
-                    <p>Atendemos em toda a região, com prontidão, eficiência e preços justos. Entre em contato conosco e
-                        conheça nossas soluções personalizadas.</p>
+            <h2 class="section-title">Marcas que Atendemos</h2>
+            <p class="section-subtitle">Trabalhamos com as principais marcas do mercado.</p>
+
+            <div class="brands-grid">
+                <div class="brand-card">GREE</div>
+                <div class="brand-card">LG</div>
+                <div class="brand-card">SAMSUNG</div>
+                <div class="brand-card">ELECTROLUX</div>
+                <div class="brand-card">CONSUL</div>
+                <div class="brand-card">BRASTEMP</div>
+                <div class="brand-card">TCL</div>
+                <div class="brand-card">PHILCO</div>
+                <div class="brand-card">AGRATTO</div>
+                <div class="brand-card">PANASONIC</div>
+            </div>
+
+            <div class="authorized-box">
+                ⭐ G&J Refrigeração: atendimento especializado com qualidade, garantia e compromisso.
+            </div>
+        </div>
+    </section>
+
+    <section class="sports-support section">
+        <div class="container">
+            <div class="support-box">
+                <div>
+                    <h2>Apoiando o esporte regional</h2>
+                    <p>
+                        A G&J Refrigeração acredita no esporte, na juventude e no desenvolvimento da nossa região.
+                        Por isso, apoia projetos esportivos, eventos locais e iniciativas que fortalecem nossa comunidade.
+                    </p>
+                </div>
+
+                <div class="support-badge">
+                    🏆 G&J no jogo
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ============================================
-         DEPOIMENTOS
-         ============================================ -->
+    <section id="sobre" class="section highlighted-section">
+        <div class="container">
+            <h2 class="section-title">Sobre Nossa Empresa</h2>
+
+            <div class="about">
+                <img src="./img/nos.png" alt="Nossa equipe de técnicos" class="about-img">
+
+                <div class="about-content">
+                    <h3>Mais de 6 anos de experiência</h3>
+
+                    <p>
+                        Nossa empresa foi fundada com a missão de oferecer soluções de qualidade em refrigeração,
+                        climatização e eletrodomésticos. Contamos com uma equipe preparada para atender residências,
+                        empresas e comércios com responsabilidade e eficiência.
+                    </p>
+
+                    <p>
+                        Trabalhamos com instalação, manutenção preventiva, higienização, reparos e troca de peças,
+                        sempre buscando entregar um serviço seguro, organizado e com garantia.
+                    </p>
+
+                    <p>
+                        Atendemos Augustinópolis e região com prontidão, preço justo e compromisso com a satisfação dos clientes.
+                    </p>
+
+                    <div class="about-features">
+                        <div>✅ Técnicos preparados</div>
+                        <div>✅ Garantia nos serviços</div>
+                        <div>✅ Atendimento 24h</div>
+                        <div>✅ Qualidade e confiança</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section id="depoimentos" class="section">
         <div class="container">
             <h2 class="section-title">O que dizem nossos clientes</h2>
+            <p class="section-subtitle">Avaliações de quem confia na G&J.</p>
+
             <div class="testimonials">
                 <div class="testimonial-card">
-                    <p class="testimonial-text">"Serviço de excelente qualidade! Os técnicos foram pontuais, cuidadosos
-                        e muito profissionais. O ar condicionado está funcionando perfeitamente e com um consumo de
-                        energia menor que antes."</p>
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">
+                        "Serviço de excelente qualidade! Os técnicos foram pontuais, cuidadosos e muito profissionais.
+                        O ar condicionado está funcionando perfeitamente."
+                    </p>
                     <p class="testimonial-author">Maria Marques, Cliente Residencial</p>
                 </div>
+
                 <div class="testimonial-card">
-                    <p class="testimonial-text">"Contratamos para fazer a manutenção dos sistemas de refrigeração do
-                        nosso restaurante. Trabalho rápido e eficiente, sem interromper o funcionamento do
-                        estabelecimento. Recomendo!"</p>
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">
+                        "Contratamos para fazer a manutenção dos sistemas de refrigeração do nosso restaurante.
+                        Trabalho rápido e eficiente."
+                    </p>
                     <p class="testimonial-author">Maria Oliveira, Restaurante Bom Sabor</p>
                 </div>
+
                 <div class="testimonial-card">
-                    <p class="testimonial-text">"Após várias tentativas com outras empresas, finalmente encontramos quem
-                        resolvesse o problema do nosso sistema de ar condicionado central. Diagnóstico preciso e solução
-                        definitiva!"</p>
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">
+                        "Depois de várias tentativas com outras empresas, encontramos quem resolvesse o problema.
+                        Diagnóstico preciso e solução definitiva."
+                    </p>
                     <p class="testimonial-author">Fernando Mendonça, Loja Mendonças</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ============================================
-         CONTATO
-         ============================================ -->
     <section id="contato" class="section highlighted-section">
         <div class="container">
             <h2 class="section-title">Entre em Contato</h2>
+            <p class="section-subtitle">Preencha o formulário e envie sua solicitação direto pelo WhatsApp.</p>
+
             <div class="contact-form">
                 <form id="whatsapp-form" onsubmit="enviarWhatsApp(event)">
                     <div class="form-group">
                         <label for="name">Nome</label>
                         <input type="text" id="name" name="name" required>
                     </div>
+
                     <div class="form-group">
                         <label for="email">Email</label>
                         <input type="email" id="email" name="email" required>
                     </div>
+
                     <div class="form-group">
                         <label for="phone">Telefone</label>
                         <input type="text" id="phone" name="phone" required>
                     </div>
+
                     <div class="form-group">
-                        <label for="service">Serviço</label>
-                        <input type="text" id="service" name="service" required>
+                        <label for="service">Serviço desejado</label>
+                        <input type="text" id="service" name="service" placeholder="Ex: manutenção de ar-condicionado" required>
                     </div>
+
                     <div class="form-group">
                         <label for="message">Mensagem</label>
-                        <textarea id="message" name="message" required></textarea>
+                        <textarea id="message" name="message" placeholder="Descreva o que você precisa..." required></textarea>
                     </div>
-                    <button type="submit" class="btn">Enviar via WhatsApp</button>
-                </form>
 
-                <script>
-                    function enviarWhatsApp(e) {
-                        e.preventDefault();
-                        const nome = document.getElementById('name').value;
-                        const email = document.getElementById('email').value;
-                        const telefone = document.getElementById('phone').value;
-                        const servico = document.getElementById('service').value;
-                        const mensagem = document.getElementById('message').value;
-                        let texto = `Olá, sou ${nome}.\n`;
-                        texto += `Email: ${email}\n`;
-                        texto += `Telefone: ${telefone}\n`;
-                        texto += `Interesse em: ${servico}\n\n`;
-                        texto += `${mensagem}`;
-                        const seuNumero = "5563992354732";
-                        window.open(`https://wa.me/${seuNumero}?text=${encodeURIComponent(texto)}`, '_blank');
-                    }
-                </script>
+                    <button type="submit" class="btn btn-copa">Enviar via WhatsApp</button>
+                </form>
             </div>
         </div>
     </section>
 
-    <!-- ============================================
-         LOCALIZAÇÃO
-         ============================================ -->
+    <script>
+        function enviarWhatsApp(e) {
+            e.preventDefault();
+
+            const nome = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const telefone = document.getElementById('phone').value;
+            const servico = document.getElementById('service').value;
+            const mensagem = document.getElementById('message').value;
+
+            let texto = `Olá, sou ${nome}.%0A`;
+            texto += `Vim pelo site da G&J na campanha da Copa.%0A%0A`;
+            texto += `Email: ${email}%0A`;
+            texto += `Telefone: ${telefone}%0A`;
+            texto += `Serviço desejado: ${servico}%0A%0A`;
+            texto += `Mensagem: ${mensagem}`;
+
+            const seuNumero = "5563992354732";
+            window.open(`https://wa.me/${seuNumero}?text=${texto}`, '_blank');
+        }
+    </script>
+
     <section id="localizacao" class="section">
         <div class="container">
             <h2 class="section-title">Nossa Localização</h2>
+
             <div class="location-wrapper">
                 <div class="location-info">
                     <div class="location-card">
@@ -457,6 +599,7 @@
                         <h3>Endereço</h3>
                         <p>Av. Goiás, 1262 - Centro<br>Augustinópolis - TO</p>
                     </div>
+
                     <div class="location-card">
                         <div class="location-icon">📞</div>
                         <h3>Telefones</h3>
@@ -465,27 +608,34 @@
                             <a href="https://wa.me/5563992354732" target="_blank">(63) 9 9235-4732</a>
                         </p>
                     </div>
+
                     <div class="location-card">
                         <div class="location-icon">⏰</div>
                         <h3>Horário de Atendimento</h3>
                         <p>Segunda a Sexta: 8h às 18h<br>Plantão 24h para emergências</p>
                     </div>
+
                     <div class="location-card">
                         <div class="location-icon">✉️</div>
                         <h3>E-mail</h3>
-                        <p><a href="mailto:gjrefrigeracao.l.f@gmail.com">gjrefrigeracao.l.f@gmail.com</a></p>
+                        <p>
+                            <a href="mailto:gjrefrigeracao.l.f@gmail.com">gjrefrigeracao.l.f@gmail.com</a>
+                        </p>
                     </div>
+
                     <div class="location-buttons">
-                        <a href="https://wa.me/5563992354732?text=Olá!%20Vim%20pelo%20site%20🎄"
-                            class="btn btn-whatsapp" target="_blank">
+                        <a href="https://wa.me/5563992354732?text=Olá!%20Vim%20pelo%20site%20da%20G%26J%20e%20quero%20um%20orçamento."
+                            class="btn btn-whatsapp-copa" target="_blank">
                             💬 Chamar no WhatsApp
                         </a>
+
                         <a href="https://www.google.com/maps/search/?api=1&query=Av.+Goiás,+1262+-+Centro+-+Augustinópolis+-+TO"
                             class="btn btn-maps" target="_blank">
                             🗺️ Ver no Google Maps
                         </a>
                     </div>
                 </div>
+
                 <div class="location-map">
                     <div class="map-container">
                         <iframe
@@ -493,6 +643,7 @@
                             width="100%" height="100%" style="border:0; border-radius: 15px;" allowfullscreen=""
                             loading="lazy" referrerpolicy="no-referrer-when-downgrade">
                         </iframe>
+
                         <div class="map-overlay">
                             <div class="map-pin">📍</div>
                         </div>
@@ -502,26 +653,28 @@
         </div>
     </section>
 
-    <!-- ============================================
-         RODAPÉ
-         ============================================ -->
     <footer>
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3>G&JRefrigeração</h3>
-                    <p>Soluções completas em refrigeração e Eletrodoméstico para sua casa ou empresa.</p>
+                    <h3>G&J Refrigeração</h3>
+                    <p>
+                        A seleção campeã contra o calor. Soluções completas em refrigeração,
+                        climatização e eletrodomésticos.
+                    </p>
                 </div>
+
                 <div class="footer-section">
                     <h3>Links Rápidos</h3>
                     <ul>
                         <li><a href="#inicio">Início</a></li>
+                        <li><a href="#promocao-copa">Promoção Copa</a></li>
                         <li><a href="#servicos">Serviços</a></li>
                         <li><a href="#sobre">Sobre Nós</a></li>
-                        <li><a href="#depoimentos">Depoimentos</a></li>
                         <li><a href="#contato">Contato</a></li>
                     </ul>
                 </div>
+
                 <div class="footer-section">
                     <h3>Contato</h3>
                     <ul>
@@ -531,6 +684,7 @@
                         <li>Endereço: Av. Goiás, 1262 - Centro - Augustinópolis</li>
                     </ul>
                 </div>
+
                 <div class="footer-section">
                     <h3>Horário de Atendimento</h3>
                     <ul>
@@ -539,32 +693,18 @@
                     </ul>
                 </div>
             </div>
+
             <div class="footer-bottom">
-                <p>&copy; 2025 G&JRefrigeração - Todos os direitos reservados</p>
-                <p>&copy;Jonas Dev</p>
+                <p>&copy; 2026 G&J Refrigeração - Todos os direitos reservados</p>
+                <p>Desenvolvido por Jonas Dev</p>
             </div>
         </div>
     </footer>
 
-    <!-- Flocos de neve -->
-    <script>
-        function createSnowflakes() {
-            const container = document.getElementById('snowflakes-container');
-            const numberOfSnowflakes = 50;
-            for (let i = 0; i < numberOfSnowflakes; i++) {
-                const snowflake = document.createElement('div');
-                snowflake.classList.add('snowflake');
-                snowflake.innerHTML = '❄';
-                snowflake.style.left = Math.random() * 100 + '%';
-                snowflake.style.animationDuration = (Math.random() * 3 + 7) + 's';
-                snowflake.style.animationDelay = Math.random() * 5 + 's';
-                snowflake.style.fontSize = (Math.random() * 10 + 10) + 'px';
-                container.appendChild(snowflake);
-            }
-        }
-        window.addEventListener('load', createSnowflakes);
-    </script>
-    <div id="snowflakes-container"></div>
+    <a href="https://wa.me/5563992354732?text=Olá!%20Vim%20pelo%20site%20da%20G%26J%20e%20quero%20um%20orçamento."
+        class="whatsapp-float" target="_blank" title="Chamar no WhatsApp">
+        💬
+    </a>
 
 </body>
 
